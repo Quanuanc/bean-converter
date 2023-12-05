@@ -7,6 +7,9 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 @Slf4j
@@ -16,8 +19,14 @@ public class Config {
     private String output;
 
     public static Optional<Config> readFromFile() {
-        ClassLoader classLoader = Config.class.getClassLoader();
-        try (InputStream is = classLoader.getResourceAsStream("config.yml")) {
+        InputStream is;
+        Path localPath = Paths.get("config.yml");
+        try {
+            if (Files.exists(localPath)) {
+                is = Files.newInputStream(localPath);
+            } else {
+                is = Config.class.getResourceAsStream("/config.yml");
+            }
             LoaderOptions options = new LoaderOptions();
             Yaml yaml = new Yaml(options);
             return Optional.of(yaml.loadAs(is, Config.class));
