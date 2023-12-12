@@ -17,6 +17,8 @@ import java.util.Optional;
 public class Config {
     private String input;
     private String output;
+    private String wechatPassword;
+    private String alipayPassword;
 
     public static Optional<Config> readFromFile() {
         InputStream is;
